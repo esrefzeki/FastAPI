@@ -50,6 +50,22 @@ def create_posts(post: Post):
 @app.get("/posts/{id}")
 def get_post(id: int):
     post = find_post(id)
+    return post
+
+
+@app.put("/posts/{id}")
+def update_post(id: int, post: Post):
+    index = find_index_post(id)
+
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The post {id} does not exist.")
+
+    post_dict = post.dict()
+    post_dict['id'] = id
+    my_post[index] = post_dict
+
+    return {'data': post_dict}
 
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
