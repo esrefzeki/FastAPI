@@ -1,0 +1,7 @@
+# uvicorn using:
+
+uvicorn directoryName.filename:app --reload (for auto-update when save)
+
+# docs
+/docs
+/redoc
