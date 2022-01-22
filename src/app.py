@@ -16,15 +16,18 @@ class Post(BaseModel):
 my_post = [{"title": "title of the content - 1", "content": "content of the post - 1", "id": 1},
            {"title": "title of the content - 2", "content": "content of the post - 2", "id": 2}]
 
+
 def find_post(id):
     for p in my_post:
         if p['id'] == id:
             return p
 
+
 def find_index_post(id):
     for i, p in enumerate(my_post):
         if p['id'] == id:
             return i
+
 
 @app.get("/")
 async def root():
@@ -35,6 +38,7 @@ async def root():
 async def get_posts():
     return {"data": my_post}
 
+
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_posts(post: Post):
     post_dict = post.dict()
@@ -42,9 +46,11 @@ def create_posts(post: Post):
     my_post.append(post_dict)
     return {"data": post_dict}
 
+
 @app.get("/posts/{id}")
 def get_post(id: int):
     post = find_post(id)
+
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int):
