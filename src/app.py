@@ -1,9 +1,10 @@
+import psycopg2
 from fastapi import FastAPI, Response, status, HTTPException
 from typing import Optional
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
-
+from psycopg2.extras import RealDictCursor
 
 app = FastAPI()
 
@@ -12,6 +13,17 @@ class Post(BaseModel):
     content: str
     published: bool = True
     rating: Optional[str] = None
+while True:
+    try:
+        conn = psycopg2.connect(host='localhost', database='fastapi', user='postgres', password='18351989',
+                               cursor_factory=RealDictCursor)
+        cursor = conn.cursor()
+        print("Database connection was succesfull!")
+
+    except Exception as error:
+        print("Connecting to database failed")
+        print("Error: ", error)
+        time.sleep(3)
 
 my_post = [{"title": "title of the content - 1", "content": "content of the post - 1", "id": 1},
            {"title": "title of the content - 2", "content": "content of the post - 2", "id": 2}]
@@ -41,8 +53,7 @@ async def get_posts():
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_posts(post: Post):
-    post_dict = post.dict()
-    post_dict['id'] = randrange(0, 110000)
+    cursor.e
     my_post.append(post_dict)
     return {"data": post_dict}
 

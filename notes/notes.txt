@@ -1,3 +1,4 @@
+
 # uvicorn using:
 
 uvicorn directoryName.filename:app --reload (for auto-update when save)
@@ -5,3 +6,7 @@ uvicorn directoryName.filename:app --reload (for auto-update when save)
 # docs
 /docs
 /redoc
+
+# SQLALCHEMY
+
+SqlAlchemy is one of the ORM(Object Relational Mapper) for python.
