@@ -10,3 +10,5 @@ uvicorn directoryName.filename:app --reload (for auto-update when save)
 # SQLALCHEMY
 
 SqlAlchemy is one of the ORM(Object Relational Mapper) for python.
+
+SQLALCHEMY_DATABASE_URL = "<sqlname>://<username>:<password>@<ip adress or hosting or localhost>/<SQL Name>"
