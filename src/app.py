@@ -63,12 +63,14 @@ async def get_posts():
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_posts(post: Post):
-    cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
-    RETURNING * """,
-                   (post.title, post.content, post.published))
-    new_post = cursor.fetchone()
-    my_post.append(post_dict)
+def create_posts(post: Post, db: Session = Depends(get_db())):
+    # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
+    # RETURNING * """,
+    #                (post.title, post.content, post.published))
+    # new_post = cursor.fetchone()
+    models.Post(title=post.title,
+                content=post.content,
+                published=post.published)
     return {"data": post_dict}
 
 
