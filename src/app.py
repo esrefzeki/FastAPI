@@ -5,7 +5,8 @@ from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
 from psycopg2.extras import RealDictCursor
-# from FastAPI.src.db_manager import engine
+from FastAPI.src.db_manager import engine, SessionLocal
+from FastAPI.src.api.models import models
 
 models.Base.metadata.create_all(bind=engine)
 
