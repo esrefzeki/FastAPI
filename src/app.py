@@ -1,44 +1,43 @@
 import psycopg2
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from typing import Optional
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
 from psycopg2.extras import RealDictCursor
-from FastAPI.src.db_manager import engine, SessionLocal
+from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
+from sqlalchemy.orm import Session
+
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Dependency:
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@app.get("/sqlalchemy")
+def test_posts(db: Session = Depends(get_db)):
+    posts = db.query(models.Post).all()
+    return {"data": posts }
 
 class Post(BaseModel):
     title: str
     content: str
     published: bool = True
     rating: Optional[str] = None
+
+
 while True:
     try:
         conn = psycopg2.connect(host='localhost', database='fastapi', user='postgres', password='18351989',
                                cursor_factory=RealDictCursor)
         cursor = conn.cursor()
         print("Database connection was succesfull!")
+        break
 
     except Exception as error:
         print("Connecting to database failed")
         print("Error: ", error)
         time.sleep(3)
-
-my_post = [{"title": "title of the content - 1", "content": "content of the post - 1", "id": 1},
-           {"title": "title of the content - 2", "content": "content of the post - 2", "id": 2}]
 
 
 def find_post(id):
@@ -65,7 +64,10 @@ async def get_posts():
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_posts(post: Post):
-    cursor.e
+    cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
+    RETURNING * """,
+                   (post.title, post.content, post.published))
+    new_post = cursor.fetchone()
     my_post.append(post_dict)
     return {"data": post_dict}
 
