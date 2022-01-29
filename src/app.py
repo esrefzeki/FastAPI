@@ -8,7 +8,7 @@ from psycopg2.extras import RealDictCursor
 from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
 from sqlalchemy.orm import Session
-from FastAPI.src.api.models.dto.post_crud import PostBase, PostCreate
+from FastAPI.src.api.models.dto import post_crud
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -35,8 +35,8 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_posts(post: PostCreate, db: Session = Depends(get_db)):
+@app.post("/posts", status_code=status.HTTP_201_CREATED, response_model=post_crud.PostResponse)
+def create_posts(post: post_crud.PostCreate, db: Session = Depends(get_db)):
     # 1:
     # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
     # RETURNING * """,
@@ -53,28 +53,30 @@ def create_posts(post: PostCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_post)
 
-    return {"data": new_post}
+    return new_post
 
 
-@app.get("/posts/{id}")
+@app.get("/posts/{id}", response_model=post_crud.PostResponse)
 def get_post(id: int, db: Session = Depends(get_db)):
     the_post = db.query(models.Post).filter(models.Post.id == id).first()
 
     if not the_post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
+    elif ValueError:
+        raise Exception("You should add missing values.")
 
-    return {"data": the_post}
+    return the_post
 
 
-@app.get("/posts")
+@app.get("/posts", response_model=post_crud.PostResponse)
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
     return {"data": posts }
 
 
 @app.put("/posts/{id}")
-def update_post(id: int, post: PostBase, db: Session = Depends(get_db)):
+def update_post(id: int, post: post_crud.PostBase, db: Session = Depends(get_db)):
     post_query = db.query(models.Post).filter(models.Post.id == id)
     check_it = post_query.first()
 
