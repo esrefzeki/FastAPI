@@ -8,6 +8,7 @@ from psycopg2.extras import RealDictCursor
 from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
 from sqlalchemy.orm import Session
+from FastAPI.src.api.models.dto.post_crud import PostBase, PostCreate
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -35,7 +36,7 @@ async def root():
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_posts(post: Post, db: Session = Depends(get_db)):
+def create_posts(post: PostCreate, db: Session = Depends(get_db)):
     # 1:
     # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
     # RETURNING * """,
@@ -73,7 +74,7 @@ def get_posts(db: Session = Depends(get_db)):
 
 
 @app.put("/posts/{id}")
-def update_post(id: int, post: Post, db: Session = Depends(get_db)):
+def update_post(id: int, post: PostBase, db: Session = Depends(get_db)):
     post_query = db.query(models.Post).filter(models.Post.id == id)
     check_it = post_query.first()
 
