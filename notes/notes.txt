@@ -12,3 +12,16 @@ uvicorn directoryName.filename:app --reload (for auto-update when save)
 SqlAlchemy is one of the ORM(Object Relational Mapper) for python.
 
 SQLALCHEMY_DATABASE_URL = "<sqlname>://<username>:<password>@<ip adress or hosting or localhost>/<SQL Name>"
+
+
+
+# def find_post(id):
+#     for p in my_post:
+#         if p['id'] == id:
+#             return p
+#
+#
+# def find_index_post(id):
+#     for i, p in enumerate(my_post):
+#         if p['id'] == id:
+#             return i

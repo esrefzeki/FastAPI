@@ -14,16 +14,11 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-@app.get("/sqlalchemy")
-def test_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).all()
-    return {"data": posts }
 
 class Post(BaseModel):
     title: str
     content: str
     published: bool = True
-    rating: Optional[str] = None
 
 
 while True:
@@ -40,26 +35,9 @@ while True:
         time.sleep(3)
 
 
-def find_post(id):
-    for p in my_post:
-        if p['id'] == id:
-            return p
-
-
-def find_index_post(id):
-    for i, p in enumerate(my_post):
-        if p['id'] == id:
-            return i
-
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
-@app.get("/posts")
-async def get_posts():
-    return {"data": my_post}
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
@@ -84,34 +62,50 @@ def create_posts(post: Post, db: Session = Depends(get_db)):
 
 
 @app.get("/posts/{id}")
-def get_post(id: int):
-    post = find_post(id)
-    return post
+def get_post(id: int, db: Session = Depends(get_db)):
+    the_post = db.query(models.Post).filter(models.Post.id == id).first()
+
+    if not the_post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The post {id} does not exist.")
+
+    return {"data": the_post}
+
+
+@app.get("/posts")
+def get_posts(db: Session = Depends(get_db)):
+    posts = db.query(models.Post).all()
+    return {"data": posts }
 
 
 @app.put("/posts/{id}")
-def update_post(id: int, post: Post):
-    index = find_index_post(id)
+def update_post(id: int, post: Post, db: Session = Depends(get_db)):
+    post_query = db.query(models.Post).filter(models.Post.id == id)
+    check_it = post_query.first()
 
-    if index == None:
+    if check_it == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
 
-    post_dict = post.dict()
-    post_dict['id'] = id
-    my_post[index] = post_dict
+    post_query.update(post.dict(), synchronize_session=False)
 
-    return {'data': post_dict}
+    db.commit()
+
+    return {'data': post_query.first()}
 
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int):
+def delete_post(id: int, db: Session = Depends(get_db)):
     # deleting post
     # find the index in the array that has required ID
     # my_posts.pop(index)
-    index = find_index_post(id)
+    post_delete = db.query(models.Post).filter(models.Post.id == id)
 
-    if index == None:
+    if post_delete == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
-    return {"info": f"The post which has id {id} removed."}
+
+    post_delete.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
