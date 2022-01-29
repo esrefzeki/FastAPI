@@ -15,12 +15,6 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-class Post(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-
-
 while True:
     try:
         conn = psycopg2.connect(host='localhost', database='fastapi', user='postgres', password='18351989',
