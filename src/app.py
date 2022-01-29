@@ -63,15 +63,24 @@ async def get_posts():
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_posts(post: Post, db: Session = Depends(get_db())):
+def create_posts(post: Post, db: Session = Depends(get_db)):
+    # 1:
     # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
     # RETURNING * """,
     #                (post.title, post.content, post.published))
     # new_post = cursor.fetchone()
-    models.Post(title=post.title,
-                content=post.content,
-                published=post.published)
-    return {"data": post_dict}
+
+    # 2:
+    # new_post = models.Post(title=post.title,
+    #                        content=post.content,
+    #                        published=post.published)
+
+    new_post = models.Post(**post.dict()) # **post.dict() ile istenen düm içerik inputlarını saymış oluyoruz.
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+
+    return {"data": new_post}
 
 
 @app.get("/posts/{id}")
