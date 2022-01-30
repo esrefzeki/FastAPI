@@ -11,7 +11,7 @@ class PostCreate(PostBase):
 
 class PostResponse(PostBase):
     id: int
-    created_at: datetime
+    created_at: datetime = datetime.now()
 
     class Config:
         orm_mode = True #Pydantic modeller dict ile çalıştığı için sqlalchemy modellerinden ziyade bunları dict olarak ister

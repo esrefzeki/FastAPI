@@ -1,6 +1,6 @@
 import psycopg2
 from fastapi import FastAPI, Response, status, HTTPException, Depends
-from typing import Optional
+from typing import Optional, List
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -63,16 +63,14 @@ def get_post(id: int, db: Session = Depends(get_db)):
     if not the_post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
-    elif ValueError:
-        raise Exception("You should add missing values.")
 
     return the_post
 
 
-@app.get("/posts", response_model=post_crud.PostResponse)
+@app.get("/posts", response_model=List[post_crud.PostResponse])
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
-    return {"data": posts }
+    return posts
 
 
 @app.put("/posts/{id}")
@@ -97,12 +95,14 @@ def delete_post(id: int, db: Session = Depends(get_db)):
     # find the index in the array that has required ID
     # my_posts.pop(index)
     post_delete = db.query(models.Post).filter(models.Post.id == id)
+    deleted = db.query(models.Post).filter(models.Post.id == id).first()
 
-    if post_delete == None:
+    if deleted == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
 
     post_delete.delete(synchronize_session=False)
     db.commit()
+    # message = "The item has been removed."
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
