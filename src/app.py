@@ -8,7 +8,7 @@ from psycopg2.extras import RealDictCursor
 from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
 from sqlalchemy.orm import Session
-from FastAPI.src.api.models.dto import post_crud
+from FastAPI.src.api.models.dto import post_crud, users_dto
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -105,3 +105,13 @@ def delete_post(id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.post("/user", status_code=status.HTTP_201_CREATED)
+def create_user(user: users_dto.UserCreate, db: Session = Depends(get_db())):
+    new_user = models.User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return new_user
