@@ -86,7 +86,7 @@ def update_post(id: int, post: post_crud.PostBase, db: Session = Depends(get_db)
 
     db.commit()
 
-    return {'data': post_query.first()}
+    return post_query.first()
 
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -103,6 +103,5 @@ def delete_post(id: int, db: Session = Depends(get_db)):
 
     post_delete.delete(synchronize_session=False)
     db.commit()
-    # message = "The item has been removed."
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
