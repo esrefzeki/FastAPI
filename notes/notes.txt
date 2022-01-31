@@ -25,3 +25,5 @@ SQLALCHEMY_DATABASE_URL = "<sqlname>://<username>:<password>@<ip adress or hosti
 #     for i, p in enumerate(my_post):
 #         if p['id'] == id:
 #             return i
+
+pip freeze # env de olan tüm kurulu kütüphaneleri gösterir
