@@ -7,9 +7,9 @@ from random import randrange
 from psycopg2.extras import RealDictCursor
 from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
+from FastAPI.src.security import utility
 from sqlalchemy.orm import Session
 from FastAPI.src.api.models.dto import post_crud, users_dto
-
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -109,9 +109,38 @@ def delete_post(id: int, db: Session = Depends(get_db)):
 
 @app.post("/user", status_code=status.HTTP_201_CREATED, response_model=users_dto.UserResponse)
 def create_user(user: users_dto.UserCreate, db: Session = Depends(get_db)):
+
+    # hash the password - user.password
+    hashed_password = utility.hash(user.password)
+    user.password = hashed_password
+
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
     return new_user
+
+
+@app.get("/user/{id}", response_model=users_dto.UserResponse)
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == id).first()
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The user {id} does not exist.")
+
+    return user
+
+
+@app.delete("/user/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == id)
+    deleted_user = db.query(models.User).filter(models.User.id == id).first()
+
+    if not deleted_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The user {id} does not exist.")
+
+    user.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
