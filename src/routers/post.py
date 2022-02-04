@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from psycopg2.extras import RealDictCursor
 from FastAPI.src.db_manager import engine, get_db
 from FastAPI.src.api.models import models
-from FastAPI.src.security import utility
+from FastAPI.src.security import utility, oauth2
 from sqlalchemy.orm import Session
 from FastAPI.src.api.models.dto import post_crud, users_dto
 from FastAPI.src.routers import post, user
@@ -18,7 +18,9 @@ router = APIRouter(
 )
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=post_crud.PostResponse)
-def create_posts(post: post_crud.PostCreate, db: Session = Depends(get_db)):
+def create_posts(post: post_crud.PostCreate,
+                 db: Session = Depends(get_db),
+                 user_id: int = Depends(oauth2.get_current_user)):
     # 1:
     # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
     # RETURNING * """,

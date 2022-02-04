@@ -17,7 +17,10 @@ router = APIRouter(
 )
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=users_dto.UserResponse)
-def create_posts(user: users_dto.UserCreate, db: Session = Depends(get_db)):
+def create_user(user: users_dto.UserCreate, db: Session = Depends(get_db)):
+
+    hashed_password = utility.pwd_context.hash(user.password)
+    user.password = hashed_password
 
     new_user = models.User(**user.dict())
     db.add(new_user)
@@ -44,8 +47,9 @@ def get_users(db: Session = Depends(get_db)):
     return user
 
 
-@router.delete("/user/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(id: int, db: Session = Depends(get_db)):
+
     user = db.query(models.User).filter(models.User.id == id)
     deleted_user = db.query(models.User).filter(models.User.id == id).first()
 

@@ -1,3 +1,4 @@
+from datetime import time
 import psycopg2
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from typing import Optional, List
@@ -11,7 +12,6 @@ from sqlalchemy.orm import Session
 from FastAPI.src.api.models.dto import post_crud, users_dto
 from FastAPI.src.routers import post, user, auth
 
-
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -22,7 +22,7 @@ app.include_router(auth.router)
 while True:
     try:
         conn = psycopg2.connect(host='localhost', database='fastapi', user='postgres', password='18351989',
-                               cursor_factory=RealDictCursor)
+                                cursor_factory=RealDictCursor)
         cursor = conn.cursor()
         print("Database connection was succesfull!")
         break
