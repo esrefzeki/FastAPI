@@ -51,14 +51,19 @@ def get_post(id: int, db: Session = Depends(get_db)):
     return the_post
 
 
-@router.get("/", response_model=List[post_crud.PostResponse])
-def get_posts(db: Session = Depends(get_db)):
+@router.get("/", response_model=List[post_crud.PostResponse], )
+def get_posts(db: Session = Depends(get_db),
+              current_user: int = Depends(oauth2.get_current_user)):
+
     posts = db.query(models.Post).all()
     return posts
 
 
 @router.put("/{id}")
-def update_post(id: int, post: post_crud.PostBase, db: Session = Depends(get_db)):
+def update_post(id: int, post: post_crud.PostBase,
+                db: Session = Depends(get_db),
+                current_user: int = Depends(oauth2.get_current_user)):
+
     post_query = db.query(models.Post).filter(models.Post.id == id)
     check_it = post_query.first()
 
@@ -74,7 +79,10 @@ def update_post(id: int, post: post_crud.PostBase, db: Session = Depends(get_db)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int, db: Session = Depends(get_db)):
+def delete_post(id: int,
+                db: Session = Depends(get_db),
+                current_user: int = Depends(oauth2.get_current_user)):
+
     # deleting post
     # find the index in the array that has required ID
     # my_posts.pop(index)
