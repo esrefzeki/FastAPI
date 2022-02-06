@@ -20,7 +20,7 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=post_crud.PostResponse)
 def create_posts(post: post_crud.PostCreate,
                  db: Session = Depends(get_db),
-                 user_id: int = Depends(oauth2.get_current_user)):
+                 current_user: int = Depends(oauth2.get_current_user)):
     # 1:
     # cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)
     # RETURNING * """,
@@ -32,7 +32,8 @@ def create_posts(post: post_crud.PostCreate,
     #                        content=post.content,
     #                        published=post.published)
 
-    new_post = models.Post(**post.dict()) # **post.dict() ile istenen düm içerik inputlarını saymış oluyoruz.
+    new_post = models.Post(owner_id=current_user.id, **post.dict()) # **post.dict() ile istenen düm içerik inputlarını saymış oluyoruz.
+
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
