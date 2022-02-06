@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from FastAPI.src.db_manager import get_db
 from FastAPI.src.security import utility, oauth2
@@ -23,3 +24,15 @@ def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session =
     access_token = oauth2.create_access_token(data={"user_id": user.id})
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+# @router.get('/logout')
+# def logout(user_credentials: OAuth2PasswordRequestForm = Depends(),
+#            db: Session = Depends(get_db)):
+#
+#     user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
+#     access_token = oauth2.create_access_token(data={"user_id": user.id})
+#     response = RedirectResponse('Logged Out', status_code=status.HTTP_302_FOUND)
+#     response.delete_cookie(key=access_token)
+#
+#     return response

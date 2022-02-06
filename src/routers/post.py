@@ -66,11 +66,15 @@ def update_post(id: int, post: post_crud.PostBase,
                 current_user: int = Depends(oauth2.get_current_user)):
 
     post_query = db.query(models.Post).filter(models.Post.id == id)
-    check_it = post_query.first()
+    post = post_query.first()
 
-    if check_it == None:
+    if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The post {id} does not exist.")
+
+    if post.id != oauth2.get_current_user.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Not authorized to perform requested action")
 
     post_query.update(post.dict(), synchronize_session=False)
 
