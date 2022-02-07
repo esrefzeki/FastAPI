@@ -10,12 +10,6 @@ class PostBase(BaseModel):
 
 class PostCreate(PostBase):
     pass
-    # title: str
-    # content: str
-    # owner_id: int
-    #
-    # class Config:
-    #     orm_mode = True
 
 
 class PostResponse(PostBase):
