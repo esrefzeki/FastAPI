@@ -40,7 +40,7 @@ def create_posts(post: post_crud.PostCreate,
 
     return new_post
 
-
+#bir başka kullanıcının tüm postlarını görme işlemini ödev olarak kendime atıyorum.
 @router.get("/myposts", response_model=List[post_crud.PostResponse], )
 def get_user_posts(db: Session = Depends(get_db),
                    current_user: int = Depends(oauth2.get_current_user)):
