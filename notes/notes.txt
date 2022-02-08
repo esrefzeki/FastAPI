@@ -27,3 +27,7 @@ SQLALCHEMY_DATABASE_URL = "<sqlname>://<username>:<password>@<ip adress or hosti
 #             return i
 
 pip freeze # env de olan tüm kurulu kütüphaneleri gösterir
+
+owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp sub olarak gösterebiliyoruz, model ve schema yı düzenliyoruz.
+# Ayrıca dikkat edilmesi gereken noktalardan bir tanesi de aynı dosya içerisine bulunan classlarda öncelikli atanan classın
+# diğer classın üzerinde olması gerektiğini noktasıdır.

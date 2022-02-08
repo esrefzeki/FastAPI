@@ -2,6 +2,7 @@ from FastAPI.src.db_manager import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.expression import null, text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
+from sqlalchemy.orm import relationship
 
 
 class Post(Base):
@@ -18,6 +19,7 @@ class Post(Base):
     owner_id = Column(Integer,
                       ForeignKey("users.id", ondelete="CASCADE"),
                       nullable=False)
+    owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp sub olarak gösterebiliyoruz, model ve schema yı düzenliyoruz.
 
 
 class User(Base):
