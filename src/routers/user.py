@@ -1,15 +1,10 @@
-import psycopg2
-from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
-from typing import Optional, List
-from fastapi.params import Body
-from pydantic import BaseModel
-from psycopg2.extras import RealDictCursor
-from FastAPI.src.db_manager import engine, get_db
+from fastapi import Response, status, HTTPException, Depends, APIRouter
+from typing import List
+from FastAPI.src.api.infrastructure.persistance.db_manager import get_db
 from FastAPI.src.api.models import models
 from FastAPI.src.security import utility
 from sqlalchemy.orm import Session
 from FastAPI.src.api.models.dto import users_dto
-from FastAPI.src.routers import post, user
 
 router = APIRouter(
     prefix="/user",
