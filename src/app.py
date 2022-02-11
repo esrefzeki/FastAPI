@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from FastAPI.src.api.infrastructure.persistance.db_manager import engine
 from FastAPI.src.api.models import models
 from FastAPI.src.routers import post, user, auth
+from FastAPI.src.config import GlobalConfig
 
 models.Base.metadata.create_all(bind=engine)
 

@@ -4,13 +4,14 @@ from typing import Optional
 from pydantic import BaseSettings, Field, Extra
 from FastAPI.src.api.infrastructure.persistance import db_manager
 
-envs_dir = os.path.join(Path(__file__).parent.parent.absolute(), 'envs')
+
+# envs_dir = os.path.join(Path(__file__).parent.parent.absolute(), 'envs')
 
 
 class GlobalConfig(BaseSettings):
     """Global Configuration"""
 
-    ENVIRONMENT: str = Field('dev', env='ENVIRONMENT')
+    # ENVIRONMENT: str = Field('dev', env='ENVIRONMENT')
 
     DB_HOST: Optional[str]
     DB_PASSWORD: Optional[str]
@@ -24,6 +25,12 @@ class GlobalConfig(BaseSettings):
     # SQLALCHEMY_DATABASE_URI: Optional[str]
     # SQLALCHEMY_TRACK_MODIFICATIONS: Optional[bool] = Field(False)
 
+    class Config:
+        env_file = r"C:\Users\Esref\PycharmProjects\fastApiProject\envs\dev.env"
+        extra = Extra.allow
+
+
+settings = GlobalConfig()
 
 # class DevConfig(GlobalConfig):
 #     class Config:

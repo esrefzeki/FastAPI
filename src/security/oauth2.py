@@ -10,6 +10,10 @@ from sqlalchemy.orm import Session
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
+# SECRET_KEY =
+# ALGORITHM =
+# ACCESS_TOKEN_EXPIRE_MINUTES =
+
 def create_access_token(data: dict):
     to_encode = data.copy()
 
@@ -22,7 +26,6 @@ def create_access_token(data: dict):
 
 
 def verify_access_token(token: str, credentials_exception):
-
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
         id: str = payload.get("user_id")

@@ -7,7 +7,7 @@ import psycopg2
 from datetime import time
 
 
-SQLALCHEMY_DATABASE_URL = f"postgresql://{GlobalConfig.DB_USERNAME}:{GlobalConfig.DB_PASSWORD}@{GlobalConfig.DB_HOST}/{GlobalConfig.DB_NAME}?charset=utf8mb4"
+SQLALCHEMY_DATABASE_URL = f'postgresql://{GlobalConfig.DB_USERNAME}:{GlobalConfig.DB_PASSWORD}@{GlobalConfig.DB_HOST}:{GlobalConfig.DB_PORT}/{GlobalConfig.DB_NAME}?charset=utf8mb4 '
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
