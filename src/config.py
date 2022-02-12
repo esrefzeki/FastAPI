@@ -5,33 +5,28 @@ from pydantic import BaseSettings, Field, Extra
 from FastAPI.src.api.infrastructure.persistance import db_manager
 
 
-# envs_dir = os.path.join(Path(__file__).parent.parent.absolute(), 'envs')
-
-
 class GlobalConfig(BaseSettings):
-    """Global Configuration"""
 
-    # ENVIRONMENT: str = Field('dev', env='ENVIRONMENT')
-
-    DB_HOST: Optional[str]
-    DB_PASSWORD: Optional[str]
-    DB_USERNAME: Optional[str]
-    DB_NAME: Optional[str]
-    DB_PORT: Optional[str]
-    SECRET_KEY: Optional[str]
-    ALGORITHM: Optional[str]
-    ACCESS_TOKEN_EXPIRE_MINUTES: Optional[int]
+    DB_HOST: str
+    DB_PORT: str
+    DB_PASSWORD: str
+    DB_NAME: str
+    DB_USERNAME: str
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     # SQLALCHEMY_DATABASE_URI: Optional[str]
     # SQLALCHEMY_TRACK_MODIFICATIONS: Optional[bool] = Field(False)
 
     class Config:
-        env_file = r"C:\Users\Esref\PycharmProjects\fastApiProject\envs\dev.env"
-        extra = Extra.allow
+        env_file = ".env"
+        # extra = Extra.allow
 
 
 settings = GlobalConfig()
 
+#
 # class DevConfig(GlobalConfig):
 #     class Config:
 #         env_file: str = os.path.join(envs_dir, 'dev.env')
@@ -55,5 +50,5 @@ settings = GlobalConfig()
 #         else:
 #             raise Exception('Environment is not found')
 #
-#         var = cls.config.SQLALCHEMY_DATABASE_URI
-#         return var
+#         cls.config.create_db_url()
+#         return cls.config

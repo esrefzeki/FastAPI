@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from FastAPI.src.config import GlobalConfig
+from FastAPI.src.config import settings
 from psycopg2.extras import RealDictCursor
 import psycopg2
 from datetime import time
 
 
-SQLALCHEMY_DATABASE_URL = f'postgresql://{GlobalConfig.DB_USERNAME}:{GlobalConfig.DB_PASSWORD}@{GlobalConfig.DB_HOST}:{GlobalConfig.DB_PORT}/{GlobalConfig.DB_NAME}?charset=utf8mb4 '
+SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}?charset=utf8mb4 '
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
