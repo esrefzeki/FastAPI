@@ -6,7 +6,6 @@ from FastAPI.src.api.infrastructure.persistance import db_manager
 
 
 class GlobalConfig(BaseSettings):
-
     DB_HOST: str
     DB_PORT: str
     DB_PASSWORD: str
@@ -25,6 +24,7 @@ class GlobalConfig(BaseSettings):
 
 
 settings = GlobalConfig()
+
 
 #
 # class DevConfig(GlobalConfig):
