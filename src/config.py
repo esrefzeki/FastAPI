@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseSettings, Field, Extra
 from FastAPI.src.api.infrastructure.persistance import db_manager
 
-
+# TODO: Farklı env dosyaları içerisine koşula göre erişim verilecek
 class GlobalConfig(BaseSettings):
     DB_HOST: str
     DB_PORT: str
