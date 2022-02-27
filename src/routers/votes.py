@@ -12,6 +12,29 @@ router = APIRouter(
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def vote(votes: vote_dto.Vote, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+def vote(votes: vote_dto.Vote, db: Session = Depends(get_db),
+         current_user: int = Depends(oauth2.get_current_user)):
     vote_query = db.query(vote_dto.Vote).filter(vote_dto.Vote.post_id == votes.post_id,
                                                 models.Votes.user_id == current_user.id)
+
+    found_vote = vote_query.first()
+    if votes.dir == 1:
+        if found_vote:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                                detail=f"User {current_user.id} has already voted on post {votes.post_id}")
+
+        new_vote = vote_dto.Vote(post_id=votes.post_id, user_id=current_user.id)
+        db.add(new_vote)
+        db.commit()
+
+        return {"message": "successfully added vote"}
+
+    else:
+        if not found_vote:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="Vote does not exist")
+
+        vote_query.delete(synchronize_session=False)
+        db.commit()
+
+        return {"message": "successfully deleted vote"}
