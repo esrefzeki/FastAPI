@@ -4,6 +4,7 @@ from FastAPI.src.api.infrastructure.persistance.db_manager import get_db
 from FastAPI.src.api.models import models
 from FastAPI.src.security import oauth2
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from FastAPI.src.api.models.dto import post_crud
 
 router = APIRouter(
@@ -55,7 +56,8 @@ def get_post(id: int, db: Session = Depends(get_db)):
     return the_post
 
 
-@router.get("/", response_model=List[post_crud.PostResponse])
+# @router.get("/", response_model=List[post_crud.PostResponse])
+@router.get("/", response_model=List[post_crud.PostVotes])
 def get_posts(db: Session = Depends(get_db),
               current_user: int = Depends(oauth2.get_current_user),
               limit: int = 10,
@@ -64,7 +66,10 @@ def get_posts(db: Session = Depends(get_db),
 
     posts = db.query(models.Post).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
 
-    return posts
+    results = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(models.Post.id).all()
+
+    return results
 
 
 @router.put("/{id}", response_model=post_crud.PostResponse)

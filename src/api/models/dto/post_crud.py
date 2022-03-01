@@ -21,3 +21,8 @@ class PostResponse(PostBase):
 
     class Config:
         orm_mode = True  # Pydantic modeller dict ile çalıştığı için sqlalchemy modellerinden ziyade bunları dict olarak ister
+
+
+class PostVotes(PostBase):
+    Post: PostResponse
+    votes: int
