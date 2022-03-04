@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 from datetime import datetime
 from FastAPI.src.api.models.dto.users_dto import UserResponse
@@ -23,9 +25,9 @@ class PostResponse(PostBase):
         orm_mode = True  # Pydantic modeller dict ile çalıştığı için sqlalchemy modellerinden ziyade bunları dict olarak ister
 
 
-class PostVotes(PostBase):
-    Posts: PostResponse
-    votes: int
+class PostVotes(BaseModel):
+    Post: PostResponse
+    votes: Optional[int]
 
     class Config:
         orm_mode = True

@@ -13,19 +13,22 @@ router = APIRouter(
 )
 
 
+
 # @router.get("/", response_model=List[post_crud.PostResponse])
-@router.get("", response_model=List[post_crud.PostVotes])
+@router.get("/", response_model=List[post_crud.PostVotes])
 def get_posts(db: Session = Depends(get_db),
               current_user: int = Depends(oauth2.get_current_user),
               limit: int = 10,
               skip: int = 0,
               search: Optional[str] = ""):
 
-    posts = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).\
-        join(models.Votes, models.Votes.post_id == models.Post.id, isouter=True).\
-        group_by(models.Post.id).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
+    # testings = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
 
-    return posts
+    posts_list = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(
+        models.Post.id).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
+    print(posts_list)
+    return posts_list
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=post_crud.PostResponse)
