@@ -24,5 +24,8 @@ class PostResponse(PostBase):
 
 
 class PostVotes(PostBase):
-    Post: PostResponse
+    Posts: PostResponse
     votes: int
+
+    class Config:
+        orm_mode = True

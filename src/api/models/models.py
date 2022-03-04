@@ -19,7 +19,8 @@ class Post(Base):
     owner_id = Column(Integer,
                       ForeignKey("users.id", ondelete="CASCADE"),
                       nullable=False)
-    owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp sub olarak gösterebiliyoruz, model ve schema yı düzenliyoruz.
+    owner = relationship(
+        "User")  # Bu özellikle birlikte bir classı çağırıp sub olarak gösterebiliyoruz, model ve schema yı düzenliyoruz.
 
 
 class User(Base):

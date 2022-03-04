@@ -12,6 +12,22 @@ router = APIRouter(
     tags=["Posts API"]
 )
 
+
+# @router.get("/", response_model=List[post_crud.PostResponse])
+@router.get("", response_model=List[post_crud.PostVotes])
+def get_posts(db: Session = Depends(get_db),
+              current_user: int = Depends(oauth2.get_current_user),
+              limit: int = 10,
+              skip: int = 0,
+              search: Optional[str] = ""):
+
+    posts = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).\
+        join(models.Votes, models.Votes.post_id == models.Post.id, isouter=True).\
+        group_by(models.Post.id).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
+
+    return posts
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=post_crud.PostResponse)
 def create_posts(post: post_crud.PostCreate,
                  db: Session = Depends(get_db),
@@ -35,7 +51,8 @@ def create_posts(post: post_crud.PostCreate,
 
     return new_post
 
-#bir başka kullanıcının tüm postlarını görme işlemini ödev olarak kendime atıyorum.
+
+
 @router.get("/myposts", response_model=List[post_crud.PostResponse], )
 def get_user_posts(db: Session = Depends(get_db),
                    current_user: int = Depends(oauth2.get_current_user)):
@@ -54,22 +71,6 @@ def get_post(id: int, db: Session = Depends(get_db)):
                             detail=f"The post {id} does not exist.")
 
     return the_post
-
-
-# @router.get("/", response_model=List[post_crud.PostResponse])
-@router.get("/", response_model=List[post_crud.PostVotes])
-def get_posts(db: Session = Depends(get_db),
-              current_user: int = Depends(oauth2.get_current_user),
-              limit: int = 10,
-              skip: int = 0,
-              search: Optional[str] = ""):
-
-    posts = db.query(models.Post).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
-
-    results = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
-        models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(models.Post.id).all()
-
-    return results
 
 
 @router.put("/{id}", response_model=post_crud.PostResponse)
