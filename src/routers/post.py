@@ -27,7 +27,7 @@ def get_posts(db: Session = Depends(get_db),
     posts_list = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
         models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(
         models.Post.id).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
-    print(posts_list)
+    
     return posts_list
 
 
@@ -65,9 +65,14 @@ def get_user_posts(db: Session = Depends(get_db),
     return posts
 
 
-@router.get("/{id}", response_model=post_crud.PostResponse)
+@router.get("/{id}", response_model=post_crud.PostVotes)
 def get_post(id: int, db: Session = Depends(get_db)):
-    the_post = db.query(models.Post).filter(models.Post.id == id).first()
+
+    #the_post = db.query(models.Post).filter(models.Post.id == id).first()
+
+    the_post = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(
+        models.Post.id).filter(models.Post.id == id).first()
 
     if not the_post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
