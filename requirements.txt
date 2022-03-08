@@ -1,7 +1,7 @@
 # FastAPI:
 uvicorn==0.17.5
-fastapi==0.74.0
-websockets==10.1
+fastapi==0.75.0
+websockets==10.2
 
 # DB:
 SQLAlchemy==1.4.31
@@ -34,4 +34,5 @@ idna==3.3
 starlette==0.17.1
 typing_extensions==4.1.1
 watchgod==0.7
+alembic==1.7.6
 
