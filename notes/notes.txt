@@ -31,3 +31,7 @@ pip freeze # env de olan tüm kurulu kütüphaneleri gösterir
 owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp sub olarak gösterebiliyoruz, model ve schema yı düzenliyoruz.
 # Ayrıca dikkat edilmesi gereken noktalardan bir tanesi de aynı dosya içerisine bulunan classlarda öncelikli atanan classın
 # diğer classın üzerinde olması gerektiğini noktasıdır.
+
+# Alembic ******
+
+# Alembic çalışmasında database içerisindeki Base 'i tanımlamak ve import etmek gerekiyor.

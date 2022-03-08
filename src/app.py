@@ -4,7 +4,7 @@ from FastAPI.src.api.models import models
 from FastAPI.src.routers import post, user, auth, votes
 from FastAPI.src import config
 from functools import lru_cache
-from FastAPI.src.config import GlobalConfig
+
 
 models.Base.metadata.create_all(bind=engine)
 
