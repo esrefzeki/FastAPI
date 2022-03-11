@@ -39,3 +39,15 @@ owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp su
 # Alembic'te autogenerate i aktif ettikten sonra otomatik olarak base models içerisindeki verileri (migration env doyasında
 # tanımladığımız için) kendi düzenleyip upgrade'e hazır hale getiriyor. Son düzenlemelerin alembic aracılığı ile
 # db'ye kaydedilmesi için alembic upgrade özelliğini konsolda çalıştırmamız gerekiyor.
+
+
+# ÖNEMLİ NOT:
+
+# API'leri sadece postman'dan kontrol etmek doğru değil. Farklı tip uygulamalardan giriş yapılabilme ihtimaline karşın
+# etkin çözümlerden biri örneğin Chrome üzerinden bir siteye girdikten sonra Console kısmına:
+# fetch('http://localhost:8000/').then(res => res.json()).then(console.log)
+
+# TODO: CORS olayını araştır.
+
+# requirements.txt dosyasını kolayca oluşturmak için consola: "pip freeze > requirements.txt" yazmak yeterli :)
+# ve bunları kurmak için ise yine consola: "pip install -r requirements.txt" yazmamız yeterli :))

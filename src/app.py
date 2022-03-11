@@ -4,11 +4,23 @@ from FastAPI.src.api.models import models
 from FastAPI.src.routers import post, user, auth, votes
 from FastAPI.src import config
 from functools import lru_cache
+from fastapi.middleware.cors import CORSMiddleware
 
-
-models.Base.metadata.create_all(bind=engine)
+# AŞAĞIDAKİ yoruma alınmış kod satırı sqlalchmey ile db'nin güncellenmesi sağlanıyordu fakat alembic'ten ötürü gerek kalmadı.
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# origins = ["https://www.google.com", "https://www.icmimarlikdergisi.com"]
+origins = ["*"] # Herkesin erişmesi için
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @lru_cache()
