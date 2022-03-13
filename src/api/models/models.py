@@ -1,4 +1,4 @@
-from FastAPI.src.api.infrastructure.persistance.db_manager import Base
+from src.api.infrastructure.persistance.db_manager import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP

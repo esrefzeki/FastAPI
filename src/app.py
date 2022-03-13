@@ -1,8 +1,6 @@
 from fastapi import FastAPI
-from FastAPI.src.api.infrastructure.persistance.db_manager import engine
-from FastAPI.src.api.models import models
-from FastAPI.src.routers import post, user, auth, votes
-from FastAPI.src import config
+from src.routers import post, user, auth, votes
+from src import config
 from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
 

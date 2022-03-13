@@ -1,10 +1,12 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
     username: str
+
 
 class UserResponse(BaseModel):
     id: int
@@ -14,6 +16,7 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class UserLogin(BaseModel):
     email: EmailStr

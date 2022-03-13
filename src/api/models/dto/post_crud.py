@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 from datetime import datetime
-from FastAPI.src.api.models.dto.users_dto import UserResponse
+from src.api.models.dto.users_dto import UserResponse
 
 
 class PostBase(BaseModel):

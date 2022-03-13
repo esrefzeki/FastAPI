@@ -1,11 +1,11 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from typing import Optional, List
-from FastAPI.src.api.infrastructure.persistance.db_manager import get_db
-from FastAPI.src.api.models import models
-from FastAPI.src.security import oauth2
+from src.api.infrastructure.persistance.db_manager import get_db
+from src.api.models import models
+from src.security import oauth2
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from FastAPI.src.api.models.dto import post_crud
+from src.api.models.dto import post_crud
 
 router = APIRouter(
     prefix="/posts",

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 from pydantic import BaseSettings, Field, Extra
-from FastAPI.src.api.infrastructure.persistance import db_manager
+from src.api.infrastructure.persistance import db_manager
 
 
 # TODO: Farklı env dosyaları içerisine koşula göre erişim verilecek

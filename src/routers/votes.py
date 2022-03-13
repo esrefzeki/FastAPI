@@ -1,9 +1,9 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
-from FastAPI.src.api.models.dto import vote_dto
-from FastAPI.src.api.models import models
+from src.api.models.dto import vote_dto
+from src.api.models import models
 from sqlalchemy.orm import Session
-from FastAPI.src.api.infrastructure.persistance.db_manager import get_db
-from FastAPI.src.security import oauth2
+from src.api.infrastructure.persistance.db_manager import get_db
+from src.security import oauth2
 
 router = APIRouter(
     prefix="/votes",

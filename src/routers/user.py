@@ -1,10 +1,10 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from typing import List
-from FastAPI.src.api.infrastructure.persistance.db_manager import get_db
-from FastAPI.src.api.models import models
-from FastAPI.src.security import utility
+from src.api.infrastructure.persistance.db_manager import get_db
+from src.api.models import models
+from src.security import utility
 from sqlalchemy.orm import Session
-from FastAPI.src.api.models.dto import users_dto
+from src.api.models.dto import users_dto
 
 router = APIRouter(
     prefix="/user",
