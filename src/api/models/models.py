@@ -12,7 +12,7 @@ class Post(Base):
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
     published = Column(Boolean,
-                       server_default="TRUE")  # default=True yerine kullanıyoruz çünkü server ile bağ kurmamız gerekiyor.
+                       server_default="TRUE", nullable=False)  # default=True yerine kullanıyoruz çünkü server ile bağ kurmamız gerekiyor.
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=text('now()'))
@@ -30,7 +30,7 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     phone_number = Column(String, nullable=True, unique=True)
-    username = Column(String, nullable=True, unique=True)
+
 
 class Votes(Base):
     __tablename__ = "votes"
