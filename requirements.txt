@@ -35,6 +35,4 @@ starlette==0.17.1
 typing_extensions==4.1.1
 watchgod==0.7
 alembic==1.7.6
-
-
-jose~=1.0.0
+python-jose==3.3.0

@@ -13,7 +13,6 @@ router = APIRouter(
 )
 
 
-
 # @router.get("/", response_model=List[post_crud.PostResponse])
 @router.get("/", response_model=List[post_crud.PostVotes])
 def get_posts(db: Session = Depends(get_db),
@@ -21,13 +20,12 @@ def get_posts(db: Session = Depends(get_db),
               limit: int = 10,
               skip: int = 0,
               search: Optional[str] = ""):
-
     # testings = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
 
     posts_list = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
         models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(
         models.Post.id).filter(models.Post.title.contains(search)).offset(skip).limit(limit).all()
-    
+
     return posts_list
 
 
@@ -46,7 +44,8 @@ def create_posts(post: post_crud.PostCreate,
     #                        content=post.content,
     #                        published=post.published)
 
-    new_post = models.Post(owner_id=current_user.id, **post.dict()) # **post.dict() ile istenen düm içerik inputlarını saymış oluyoruz.
+    new_post = models.Post(owner_id=current_user.id,
+                           **post.dict())  # **post.dict() ile istenen düm içerik inputlarını saymış oluyoruz.
 
     db.add(new_post)
     db.commit()
@@ -55,11 +54,9 @@ def create_posts(post: post_crud.PostCreate,
     return new_post
 
 
-
 @router.get("/myposts", response_model=List[post_crud.PostResponse], )
 def get_user_posts(db: Session = Depends(get_db),
                    current_user: int = Depends(oauth2.get_current_user)):
-
     posts = db.query(models.Post).filter(models.Post.owner_id == current_user.id).all()
 
     return posts
@@ -67,8 +64,7 @@ def get_user_posts(db: Session = Depends(get_db),
 
 @router.get("/{id}", response_model=post_crud.PostVotes)
 def get_post(id: int, db: Session = Depends(get_db)):
-
-    #the_post = db.query(models.Post).filter(models.Post.id == id).first()
+    # the_post = db.query(models.Post).filter(models.Post.id == id).first()
 
     the_post = db.query(models.Post, func.count(models.Votes.post_id).label("votes")).join(
         models.Votes, models.Votes.post_id == models.Post.id, isouter=True).group_by(
@@ -86,7 +82,6 @@ def update_post(id: int,
                 updated_post: post_crud.PostCreate,
                 db: Session = Depends(get_db),
                 current_user: int = Depends(oauth2.get_current_user)):
-
     post_query = db.query(models.Post).filter(models.Post.id == id)
     post = post_query.first()
 
@@ -109,7 +104,6 @@ def update_post(id: int,
 def delete_post(id: int,
                 db: Session = Depends(get_db),
                 current_user: int = Depends(oauth2.get_current_user)):
-
     # deleting post
     # find the index in the array that has required ID
     # my_posts.pop(index)
