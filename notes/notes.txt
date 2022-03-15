@@ -51,3 +51,6 @@ owner = relationship("User") # Bu özellikle birlikte bir classı çağırıp su
 
 # requirements.txt dosyasını kolayca oluşturmak için consola: "pip freeze > requirements.txt" yazmak yeterli :)
 # ve bunları kurmak için ise yine consola: "pip install -r requirements.txt" yazmamız yeterli :))
+
+# Production serverında alembic revision yapmamak gerekiyor. Dev ortamında bunu yapıp dosyaları push edip
+# upgrade yapmak doğru olanı olacaktır.
