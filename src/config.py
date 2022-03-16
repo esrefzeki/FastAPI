@@ -5,7 +5,6 @@ from pydantic import BaseSettings, Field, Extra
 from src.api.infrastructure.persistance import db_manager
 
 
-# TODO: Farklı env dosyaları içerisine koşula göre erişim verilecek
 class GlobalConfig(BaseSettings):
     DB_HOST: str
     DB_PORT: str
@@ -16,12 +15,8 @@ class GlobalConfig(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    # SQLALCHEMY_DATABASE_URI: Optional[str]
-    # SQLALCHEMY_TRACK_MODIFICATIONS: Optional[bool] = Field(False)
-
     class Config:
-        env_file = ".env"
-        # extra = Extra.allow
+        env_file = "src/.env"
 
 
 settings = GlobalConfig()
