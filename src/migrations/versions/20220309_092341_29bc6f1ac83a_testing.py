@@ -8,7 +8,6 @@ Create Date: 2022-03-09 09:23:41.952974+00:00
 from alembic import op
 import sqlalchemy as sa
 
-
 # revision identifiers, used by Alembic.
 revision = '29bc6f1ac83a'
 down_revision = None
@@ -40,7 +39,6 @@ def upgrade():
                               primary_key=True),
                     sa.Column('post_id', sa.Integer(), sa.ForeignKey("posts.id", ondelete="CASCADE"),
                               primary_key=True))
-
 
     pass
 
