@@ -17,17 +17,36 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('posts', sa.Column('owner_id', sa.Integer(), nullable=False))
-    op.create_foreign_key('post_users_fk',
-                          source_table="posts",
-                          referent_table="users",
-                          local_cols=['owner_id'],
-                          remote_cols=['id'],
-                          ondelete="CASCADE")
+    op.create_table('posts',
+                    sa.Column('id', sa.Integer(), nullable=False, primary_key=True),
+                    sa.Column('title', sa.String(), nullable=False),
+                    sa.Column('content', sa.String(), nullable=False),
+                    sa.Column('published', sa.Boolean(), server_default="TRUE", nullable=False),
+                    sa.Column('created_at', sa.TIMESTAMP(timezone=True), nullable=False,
+                              server_default=sa.text('now()')),
+                    sa.Column('owner_id', sa.Integer(), sa.ForeignKey('users.id', ondelete="CASCADE"), nullable=False),
+                    sa.Column('owner', sa.String())
+                    )
+    op.create_table('users',
+                    sa.Column('id', sa.Integer(), nullable=False, primary_key=True),
+                    sa.Column('email', sa.String(), nullable=False, unique=True),
+                    sa.Column('password', sa.String(), nullable=False),
+                    sa.Column('created_at', sa.TIMESTAMP(timezone=True), nullable=False,
+                              server_default=sa.text('now()')),
+                    sa.Column('phone_number', sa.String(), nullable=True, unique=True)
+                    )
+    op.create_table('votes',
+                    sa.Column('user_id', sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"),
+                              primary_key=True),
+                    sa.Column('post_id', sa.Integer(), sa.ForeignKey("posts.id", ondelete="CASCADE"),
+                              primary_key=True))
+
+
     pass
 
 
 def downgrade():
-    op.drop_constraint('post_users_fk', table_name="posts")
-    op.drop_column('posts', 'owner_id')
+    op.drop_table('posts')
+    op.drop_table('users')
+    op.drop_table('votes')
     pass
